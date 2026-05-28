@@ -1,6 +1,55 @@
 /**
  * @license
  * SPDX-License-Identifier: Apache-2.0
+ * 
+ * ============================================================================
+ * SIN-SHOP MAIN APPLICATION COMPONENT
+ * ============================================================================
+ * 
+ * STATE MANAGEMENT:
+ * - products: Product catalog (synced with localStorage)
+ * - cartItems: Shopping cart items
+ * - wishlist: User's saved products
+ * - orders: Completed order history
+ * - currentUser: Logged-in user info
+ * 
+ * FILTERING:
+ * - selectedCategory: Main category filter (e.g., "Tech & Gadgets")
+ * - selectedSubcategory: Subcategory filter (e.g., "Audio")
+ * - searchQuery: Text search across product titles/descriptions
+ * - sortBy: Sorting order (price, rating)
+ * 
+ * ============================================================================
+ * FRONTEND TODO LIST (Inline Documentation)
+ * ============================================================================
+ * 
+ * OPTISCHE VERBESSERUNGEN:
+ * - [ ] FIX: Navbar-Name inkonsistent - "BLITZ_SHOP" vs "SIN_WEBSHOP" vereinheitlichen
+ * - [ ] FIX: Mobile-Layout - Produktgrid auf Mobile reparieren (Produkte nicht sichtbar)
+ * - [ ] FIX: Footer Spacing - Zu viel vertikaler Abstand zwischen Trust-Icons und Footer-Grid
+ * - [ ] IMPROVE: Newsletter-Input - Send-Button Hover-State hinzufuegen
+ * - [ ] IMPROVE: Produktbilder - Fallback fuer fehlende Unsplash-Bilder
+ * 
+ * INHALTLICHE VERBESSERUNGEN:
+ * - [ ] REMOVE: Fake Social Proof - "449 bestellt" basiert auf charCodeAt, entfernen oder echte Daten
+ * - [ ] REMOVE: Fake Viewer Count - "4 Betrachter live!" ist Fake-Wert
+ * - [ ] FIX: Hardcoded Countdown - Timer resetzt auf 12:00:00 statt echtem Deal-Ende
+ * - [ ] FIX: Demo-User Anzeige - "Christian Mueller" ist hardcoded, Login-State zeigen
+ * - [ ] FIX: Fake Reviews - Rating-Count "(342)" als Fallback, keine echten Daten
+ * - [ ] FIX: Footer Jahr - "Est. 2026" ist in der Zukunft, aktuelles Jahr verwenden
+ * 
+ * FUNKTIONALE VERBESSERUNGEN:
+ * - [ ] IMPROVE: Subcategory-Dropdown - Kategorien ohne Scrollen sichtbar machen
+ * - [ ] IMPROVE: Mobile Navigation - Kategorie-Filter besser sichtbar machen
+ * - [ ] ADD: Suchfunktion - Autocomplete/Suggestions hinzufuegen
+ * - [ ] ADD: Wishlist Badge - Visueller Unterschied ob leer oder voll
+ * 
+ * BACKEND INTEGRATION (Naechste Phase):
+ * - [ ] Supabase: Produkte aus Datenbank laden statt localStorage
+ * - [ ] Supabase Auth: Echte Benutzerauthentifizierung
+ * - [ ] Stripe: Checkout Integration
+ * - [ ] CJ Dropshipping: Produkt-SKU Mapping
+ * ============================================================================
  */
 
 import React, { useState, useEffect, useMemo } from "react";
@@ -604,6 +653,23 @@ export default function App() {
         setSearchQuery={setSearchQuery}
         currentUser={currentUser}
         onToggleUser={handleToggleUser}
+        /* NEW: Category/Subcategory filter props for Navbar dropdown */
+        selectedCategory={selectedCategory}
+        setSelectedCategory={setSelectedCategory}
+        selectedSubcategory={selectedSubcategory}
+        setSelectedSubcategory={setSelectedSubcategory}
+        availableSubcategories={availableSubcategories}
+        categories={CATEGORIES}
+        subcategoryCounts={
+          products
+            .filter(p => selectedCategory === "All Products" || p.category === selectedCategory)
+            .reduce((acc, p) => {
+              if (p.subcategory) {
+                acc[p.subcategory] = (acc[p.subcategory] || 0) + 1;
+              }
+              return acc;
+            }, {} as Record<string, number>)
+        }
       />
 
       {/* Central Content Container Frame */}
@@ -1058,6 +1124,23 @@ export default function App() {
         browsingHistory={browsingHistory}
         currentUser={currentUser}
         onToggleUser={handleToggleUser}
+        /* NEW: Category/Subcategory filter props for Navbar dropdown */
+        selectedCategory={selectedCategory}
+        setSelectedCategory={setSelectedCategory}
+        selectedSubcategory={selectedSubcategory}
+        setSelectedSubcategory={setSelectedSubcategory}
+        availableSubcategories={availableSubcategories}
+        categories={CATEGORIES}
+        subcategoryCounts={
+          products
+            .filter(p => selectedCategory === "All Products" || p.category === selectedCategory)
+            .reduce((acc, p) => {
+              if (p.subcategory) {
+                acc[p.subcategory] = (acc[p.subcategory] || 0) + 1;
+              }
+              return acc;
+            }, {} as Record<string, number>)
+        }
         onAddReview={handleAddReview}
         onViewProduct={handleViewProduct}
       />
