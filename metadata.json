@@ -1,0 +1,6 @@
+{
+  "name": "TEMU & Amazon Bargain Shop",
+  "description": "TEMU- und Amazon-Style Blitz-Angebote Portal mit Gamified-Gutscheinen, interaktiver Kasse und Echtzeit-Aktionen.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
